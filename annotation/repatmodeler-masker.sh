@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#If you have downloaded the genome from NCBI make sure you don't have spaces or special charatcters:
+sed 's/[[:space:]].*//' genome.fa | sed 's/[^>A-Za-z0-9_:-]/_/g' > genome_cleaned.fa
+
 #RepeatModeler
 #generate a species specific repeat library using the BLAST database
 conda activate RepeatMasker
