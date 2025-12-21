@@ -12,42 +12,42 @@ set -u  # Exit on undefined variable
 # CONFIGURATION VARIABLES - EDIT THESE FOR YOUR ANALYSIS
 ################################################################################
 
-# Input genome file (unmasked)
-GENOME_FILE="/data/Stombeanensis/assemblies/S_tomb_removed_organelles.curated.fasta"
+# Input genome path file (unmasked)
+GENOME_FILE="/data/fdalgrande_data/anna_fungi/added_fungal_genomes/Microsporidia_added/data/Holomycota_Hamiltosporidium_tvaerminnensis/GCA_022605425.2_FIOER33_v3_genomic.cleaned.fa"
 
 # Species name (used for database naming and BRAKER)
-SPECIES_NAME="saxifraga"
+SPECIES_NAME="Hamiltosporidium_tvaerminnensis"
 
 # Working directories
-BASE_DIR="/data/Stombeanensis/annotation"
+BASE_DIR="/data/fdalgrande_data/anna_fungi/added_fungal_genomes/Microsporidia_added/data/Holomycota_Hamiltosporidium_tvaerminnensis"
 REPEATMODELER_DIR="${BASE_DIR}/RepeatModeler"
 REPEATMASKER_DIR="${BASE_DIR}/RepeatMasker"
 BRAKER_DIR="${BASE_DIR}/Braker3"
 
 # RepeatModeler settings
-RM_THREADS=40
+RM_THREADS=10
 RM_DATABASE="${SPECIES_NAME}_db"
-ENABLE_LTRSTRUCT=true  # Set to false to skip LTR structuring (faster)
+ENABLE_LTRSTRUCT=false  # Set to false to skip LTR structuring (faster)
 
 # RepeatMasker settings
-RMASK_THREADS=30
+RMASK_THREADS=20
 
 # BRAKER3 settings
-BRAKER_THREADS=35
+BRAKER_THREADS=15
 BRAKER_SPECIES="${SPECIES_NAME}"
-BUSCO_LINEAGE="eudicots_odb10"  # e.g., eudicots_odb10, fungi_odb10, vertebrata_odb10
-PROTEIN_DB="/data/tools/orthodb_Viridiplantae.fa"
-BRAKER_SINGULARITY="/path/to/braker3.sif"  # Path to BRAKER3 singularity image
+BUSCO_LINEAGE="fungi_odb10"  # e.g., eudicots_odb10, fungi_odb10, vertebrata_odb10
+PROTEIN_DB="/data/fdalgrande_data/tools/orthodb_Fungi.fa"
+BRAKER_SINGULARITY="/data/fdalgrande_data/anna_fungi/added_fungal_genomes/Microsporidia_added/data/Holomycota_Hamiltosporidium_tvaerminnensis/braker3.sif"  # Path to BRAKER3 singularity image
 USE_EXISTING=false  # Set to true if re-running BRAKER with same species
 
 # Augustus paths
-AUGUSTUS_CONFIG_PATH="${BRAKER_DIR}/Augustus_config"
-AUGUSTUS_BIN_PATH="/data/tools/BRAKER3/Augustus"
-AUGUSTUS_SCRIPTS_PATH="/data/tools/BRAKER3/Augustus/scripts"
+AUGUSTUS_CONFIG_PATH="/data/fdalgrande_data/anna_fungi/added_fungal_genomes/Microsporidia_added/data/Holomycota_Hamiltosporidium_tvaerminnensis/config"
+AUGUSTUS_BIN_PATH="/data/fdalgrande_data/tools/BRAKER3/Augustus"
+AUGUSTUS_SCRIPTS_PATH="/data/fdalgrande/data/tools/BRAKER3/Augustus/scripts"
 
 # Conda environments
 REPEATMASKER_ENV="RepeatMasker"
-BRAKER_ENV="braker3"
+BRAKER_ENV="Braker3"
 
 # Log file
 LOG_FILE="${BASE_DIR}/pipeline_$(date +%Y%m%d_%H%M%S).log"
@@ -199,7 +199,7 @@ check_file "$PROTEIN_DB"
 check_file "$BRAKER_SINGULARITY"
 
 # Prepare BRAKER command
-BRAKER_CMD="singularity exec -B /data/tools -B ${PWD}:${PWD} $BRAKER_SINGULARITY braker.pl"
+BRAKER_CMD="singularity exec -B /data/fdalgrande_data/tools -B ${PWD}:${PWD} $BRAKER_SINGULARITY braker.pl"
 BRAKER_CMD="$BRAKER_CMD --species=$BRAKER_SPECIES"
 BRAKER_CMD="$BRAKER_CMD --genome=$MASKED_GENOME"
 BRAKER_CMD="$BRAKER_CMD --prot_seq=$PROTEIN_DB"
